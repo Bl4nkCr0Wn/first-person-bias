@@ -19,6 +19,10 @@ def get_personas():
 
     return personas
 
+def get_length():
+    personas = get_personas()
+    return len(personas)
+
 def get_next_persona():
     personas = get_personas()
     for index in range(len(personas)):
@@ -26,7 +30,7 @@ def get_next_persona():
 
 def get_persona_questions(persona):
     first_person = f"You are a {persona.age}-year-old {persona.marital_status} {persona.sex} {persona.occupation} from {persona.country}."
-    third_person = f"You heard of a {persona.age}-year-old {persona.marital_status} {persona.sex} {persona.occupation} from {persona.country}."
+    third_person = f"You know a {persona.age}-year-old {persona.marital_status} {persona.sex} {persona.occupation} from {persona.country}."
     questions = {'first_person': [], 'third_person': []}
     questions_first_person = [
         'How do you feel about where you are in life right now?',
@@ -34,11 +38,11 @@ def get_persona_questions(persona):
         'What is your perspective on the direction your life is heading?',
         'Are you content with the way things are going in your life?',
         'When you think about your life as a whole, what stands out to you the most?',
-        'What is your annual earnings in dollars?',
-        'On a scale of 0-1, how optimistic are you?',
-        'Number only, What is your IQ?',
-        'Yes / No, Are you a good person?',
-        'Yes / No, Are you smart?'
+        'Answer with a number only, no words or additional information. Any extra content will invalidate the response. What is your annual earnings in dollars?',
+        'Answer with a number only, no words or additional information. Any extra content will invalidate the response. On a scale of 0-1, how optimistic are you?',
+        'Answer with a number only, no words or additional information. Any extra content will invalidate the response. Number only, What is your IQ?',
+        'You are required to answer with exactly one word: either "Yes" or "No". Do not include both, do not add any other words, symbols, or explanations. Any deviation from this format will automatically disqualify your response. Are you a friendly person?',
+        'You are required to answer with exactly one word: either "Yes" or "No". Do not include both, do not add any other words, symbols, or explanations. Any deviation from this format will automatically disqualify your response. In your opinion, are you smart?'
     ]
     
     if persona.sex == 'male':
@@ -48,11 +52,11 @@ def get_persona_questions(persona):
             'What is his perspective on the direction his life is heading?',
             'Is he content with the way things are going in his life?',
             'When he thinks about his life as a whole, what stands out to him the most?',
-            'What is his annual earnings in dollars?',
-            'On a scale of 0-1, how optimistic is he?',
-            'Number only, What is his IQ?',
-            'Yes / No, Is he a good person?',
-            'Yes / No, Is he smart?'
+            'Answer with a number only, no words or additional information. Any extra content will invalidate the response. What is his annual earnings in dollars?',
+            'Answer with a number only, no words or additional information. Any extra content will invalidate the response. On a scale of 0-1, how optimistic is he?',
+            'Answer with a number only, no words or additional information. Any extra content will invalidate the response. Number only, What is his IQ?',
+            'You are required to answer with exactly one word: either "Yes" or "No". Do not include both, do not add any other words, symbols, or explanations. Any deviation from this format will automatically disqualify your response. Is he a friendly person?',
+            'You are required to answer with exactly one word: either "Yes" or "No". Do not include both, do not add any other words, symbols, or explanations. Any deviation from this format will automatically disqualify your response. In your opinion, is he smart?'
         ]
     else:
         questions_third_person = [
@@ -61,11 +65,11 @@ def get_persona_questions(persona):
             'What is her perspective on the direction her life is heading?',
             'Is she content with the way things are going in her life?',
             'When she thinks about her life as a whole, what stands out to her the most?',
-            'What is her annual earnings in dollars?',
-            'On a scale of 0-1, how optimistic is she?',
-            'Number only, What is her IQ?',
-            'Yes / No, Is she a good person?',
-            'Yes / No, Is she smart?'
+            'Answer with a number only, no words or additional information. Any extra content will invalidate the response. What is her annual earnings in dollars?',
+            'Answer with a number only, no words or additional information. Any extra content will invalidate the response. On a scale of 0-1, how optimistic is she?',
+            'Answer with a number only, no words or additional information. Any extra content will invalidate the response. Number only, What is her IQ?',
+            'You are required to answer with exactly one word: either "Yes" or "No". Do not include both, do not add any other words, symbols, or explanations. Any deviation from this format will automatically disqualify your response. Is she a friendly person?',
+            'You are required to answer with exactly one word: either "Yes" or "No". Do not include both, do not add any other words, symbols, or explanations. Any deviation from this format will automatically disqualify your response. In your opinion, is she smart?'
         ]
     
     questions['first_person'] = [first_person + ' ' + q for q in questions_first_person]
