@@ -27,7 +27,7 @@ def load_model(model_name):
     )
     return tokenizer, model
 
-def inference(tokenizer, model, prompt):
+def inference(tokenizer, model, prompt, max_length=150):
     inputs = tokenizer(prompt, return_tensors="pt").to(DEVICE)
-    output = model.generate(**inputs, max_length=150, pad_token_id=tokenizer.eos_token_id)
+    output = model.generate(**inputs, max_new_tokens=max_length, pad_token_id=tokenizer.eos_token_id)
     return tokenizer.decode(output[0], skip_special_tokens=True)
