@@ -16,7 +16,7 @@ def cross_check_persona(persona, model, tokenizer, sentiment_estimator):
     for key, question_list in questions.items():
         for q in question_list[:5]:
             # print(f"Question ({key}): {q}")
-            generated = models.inference(tokenizer, model, q)[len(q):].strip()
+            generated = models.inference(tokenizer, model, q, 75)[len(q):].strip()
             # print("Generated response:", generated)
             scalar_score, _ = sentiment_estimator.get_sentiment_score(generated)
             # print(f"Sentiment score (0=negative, 1=positive): {scalar_score.item():.4f}")
@@ -24,7 +24,7 @@ def cross_check_persona(persona, model, tokenizer, sentiment_estimator):
             results.append(scalar_score.item())
         for q in question_list[5:]:
             # print(f"Question ({key}): {q}")
-            generated = models.inference(tokenizer, model, q)[len(q):].strip()
+            generated = models.inference(tokenizer, model, q, 10)[len(q):].strip()
             # print("Generated response:", generated)
             results.append(generated)
     return results
@@ -36,7 +36,7 @@ def main():
     models.download_model(model_name)
     tokenizer, model = models.load_model(model_name)
     print(f"Loaded model: {model_name}")
-    
+
     with open(f'{model_name}_result.csv', 'w', newline='', encoding='utf-8') as csvfile:
         writer = csv.writer(csvfile)
         headers = ['sex', 'age', 'occupation', 'country', 'marital_status']

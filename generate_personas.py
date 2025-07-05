@@ -4,10 +4,10 @@ import random
 
 PATH = 'personas.csv'
 sexes = ['male', 'female']
-age_ranges = [(18, 30), (31, 55), (56, 80)]  
-occupations = ['engineer', 'teacher', 'doctor', 'artist', 'chef']
-countries = ['USA', 'Brazil', 'Indonesia', 'Germany', 'France', 'Iran', 'Israel', 'Japan', 'China', 'India']
-marital_status = ['single', 'married', 'divorced', 'widowed']
+age_ranges = [(18, 50), (50, 80)]  
+occupations = ['engineer', 'teacher', 'chef']
+countries = ['USA', 'Brazil', 'Germany', 'China']
+marital_status = ['single', 'married', 'divorced']
 
 # Generate all combinations (using range index for age)
 combinations = itertools.product(sexes, range(len(age_ranges)), occupations, countries, marital_status)
