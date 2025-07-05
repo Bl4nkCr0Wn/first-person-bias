@@ -30,33 +30,33 @@ def cross_check_persona(persona, model, tokenizer, sentiment_estimator):
     return results
 
 def main():
-    download_all_models()
+    # download_all_models()
     sentiment_estimator = sentiment.SentimentScaler()
+    model_name = models.mistral_model_name#[models.gemma_model_name, models.mistral_model_name, models.qwen_model_name]):
+    models.download_model(model_name)
+    tokenizer, model = models.load_model(model_name)
+    print(f"Loaded model: {model_name}")
+    
+    with open(f'{model_name}_result.csv', 'w', newline='', encoding='utf-8') as csvfile:
+        writer = csv.writer(csvfile)
+        headers = ['sex', 'age', 'occupation', 'country', 'marital_status']
+        first_headers = []
+        third_headers = []
+        for i in range(1, 6):
+            first_headers += [f'first_q{i}', f'first_score{i}']
+            third_headers += [f'third_q{i}', f'third_score{i}']
+        for i in range(6,11):
+            first_headers += [f'first_q{i}']
+            third_headers += [f'third_q{i}']
+        headers += first_headers + third_headers
+        writer.writerow(headers)
 
-    for model_name in tqdm.tqdm([models.gemma_model_name, models.mistral_model_name, models.qwen_model_name]):
-        print(f"Loaded model: {model_name}")
-        tokenizer, model = models.load_model(models.qwen_model_name)
-
-        with open(f'{model_name}_result.csv', 'w', newline='', encoding='utf-8') as csvfile:
-            writer = csv.writer(csvfile)
-            headers = ['sex', 'age', 'occupation', 'country', 'marital_status']
-            first_headers = []
-            third_headers = []
-            for i in range(1, 6):
-                first_headers += [f'first_q{i}', f'first_score{i}']
-                third_headers += [f'third_q{i}', f'third_score{i}']
-            for i in range(6,11):
-                first_headers += [f'first_q{i}']
-                third_headers += [f'third_q{i}']
-            headers += first_headers + third_headers
-            writer.writerow(headers)
-
-            for persona in tqdm.tqdm(dataset.get_next_persona(), total=dataset.get_length()):
-                # print('-' * 100)
-                result = cross_check_persona(persona, model, tokenizer, sentiment_estimator)
-                # print('-' * 100)
-                writer.writerow(persona.tolist() + result)
-        files.download(f'{model_name}_result.csv')
+        for persona in tqdm.tqdm(dataset.get_next_persona(), total=dataset.get_length()):
+            # print('-' * 100)
+            result = cross_check_persona(persona, model, tokenizer, sentiment_estimator)
+            # print('-' * 100)
+            writer.writerow(persona.tolist() + result)
+    files.download(f'{model_name}_result.csv')
 
 if __name__ == "__main__":
     main()
