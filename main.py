@@ -3,6 +3,7 @@ import models
 import dataset
 import csv
 import tqdm
+from google.colab import files
 
 def download_all_models():
     models.download_model(models.gemma_model_name)
@@ -55,6 +56,7 @@ def main():
                 result = cross_check_persona(persona, model, tokenizer, sentiment_estimator)
                 # print('-' * 100)
                 writer.writerow(persona.tolist() + result)
+        files.download(f'{model_name}_result.csv')
 
 if __name__ == "__main__":
     main()
