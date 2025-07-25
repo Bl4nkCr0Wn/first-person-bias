@@ -16,7 +16,7 @@ def cross_check_persona(persona, model, tokenizer, sentiment_estimator):
     for key, question_list in questions.items():
         for q in question_list[:5]:
             # print(f"Question ({key}): {q}")
-            generated = models.inference(tokenizer, model, q, 75)[len(q):].strip()
+            generated = models.inference(tokenizer, model, q, 150)[len(q):].strip()
             # print("Generated response:", generated)
             scalar_score, _ = sentiment_estimator.get_sentiment_score(generated)
             # print(f"Sentiment score (0=negative, 1=positive): {scalar_score.item():.4f}")
