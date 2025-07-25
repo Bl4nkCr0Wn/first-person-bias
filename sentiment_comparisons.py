@@ -3,8 +3,11 @@ import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
 
+# Define the model name
+model_name = "Qwen2.5-7B-Instruct"
+
 # Load the CSV file
-df = pd.read_csv('Qwen2.5-7B-Instruct_result.csv')
+df = pd.read_csv(f'{model_name}_result.csv')
 
 # --- Data Cleaning and Preparation ---
 
@@ -39,7 +42,7 @@ for bar in bars:
     yval = bar.get_height()
     plt.text(bar.get_x() + bar.get_width()/2.0, yval, f'{yval:.2f}', va='bottom', ha='center') # va: vertical alignment
 
-plt.savefig('overall_sentiment_comparison.png')
+plt.savefig(f'{model_name}_overall_sentiment_comparison.png')
 plt.close()
 
 # --- Sentiment Comparison by Occupation ---
@@ -63,7 +66,7 @@ plt.title('Average Sentiment Score by Occupation: First-Person vs. Third-Person'
 plt.xticks(index + bar_width / 2, occupation_sentiment['occupation'], rotation=45, ha='right')
 plt.legend()
 plt.tight_layout()
-plt.savefig('sentiment_by_occupation.png')
+plt.savefig(f'{model_name}_sentiment_by_occupation.png')
 plt.close()
 
 # --- Sentiment Comparison by Marital Status ---
@@ -86,7 +89,7 @@ plt.title('Average Sentiment Score by Marital Status: First-Person vs. Third-Per
 plt.xticks(index + bar_width / 2, marital_status_sentiment['marital_status'])
 plt.legend()
 plt.tight_layout()
-plt.savefig('sentiment_by_marital_status.png')
+plt.savefig(f'{model_name}_sentiment_by_marital_status.png')
 plt.close()
 
 # --- Sentiment Comparison by Country ---
@@ -109,7 +112,7 @@ plt.title('Average Sentiment Score by Country: First-Person vs. Third-Person')
 plt.xticks(index + bar_width / 2, country_sentiment['country'], rotation=45, ha='right')
 plt.legend()
 plt.tight_layout()
-plt.savefig('sentiment_by_country.png')
+plt.savefig(f'{model_name}_sentiment_by_country.png')
 plt.close()
 
 # --- 1. Response Length Analysis ---
@@ -137,7 +140,7 @@ plt.title('Overall Average Response Length: First-Person vs. Third-Person')
 for bar in bars:
     yval = bar.get_height()
     plt.text(bar.get_x() + bar.get_width()/2.0, yval, f'{yval:.0f}', va='bottom', ha='center')
-plt.savefig('average_response_length.png')
+plt.savefig(f'{model_name}_average_response_length.png')
 plt.close()
 
 # Group by occupation for length analysis
@@ -155,7 +158,7 @@ plt.title('Average Response Length by Occupation')
 plt.xticks(index + bar_width / 2, occupation_len['occupation'], rotation=45, ha='right')
 plt.legend()
 plt.tight_layout()
-plt.savefig('response_length_by_occupation.png')
+plt.savefig(f'{model_name}_response_length_by_occupation.png')
 plt.close()
 
 # --- 2. Age vs. Sentiment Correlation ---
@@ -169,7 +172,7 @@ plt.xlabel('Age')
 plt.ylabel('Average Sentiment Score')
 plt.legend()
 plt.grid(True)
-plt.savefig('age_vs_sentiment.png')
+plt.savefig(f'{model_name}_age_vs_sentiment.png')
 plt.close()
 
 # --- 3. Sentiment Score Distribution ---
@@ -182,7 +185,7 @@ plt.title('Distribution of Sentiment Scores')
 plt.xlabel('Average Sentiment Score')
 plt.ylabel('Density')
 plt.legend()
-plt.savefig('sentiment_distribution.png')
+plt.savefig(f'{model_name}_sentiment_distribution.png')
 plt.close()
 
 # --- 4. Response Length vs. Sentiment Score ---
@@ -196,7 +199,7 @@ plt.xlabel('Average Response Length (characters)')
 plt.ylabel('Average Sentiment Score')
 plt.legend()
 plt.grid(True)
-plt.savefig('length_vs_sentiment.png')
+plt.savefig(f'{model_name}_length_vs_sentiment.png')
 plt.close()
 
 # --- 5. Sentiment Score by Occupation ---
@@ -209,7 +212,7 @@ plt.xlabel('Occupation')
 plt.ylabel('Average Sentiment Score')
 plt.xticks(rotation=45, ha='right')
 plt.tight_layout()
-plt.savefig('boxplot_sentiment_by_occupation_first.png')
+plt.savefig(f'{model_name}_boxplot_sentiment_by_occupation_first.png')
 plt.close()
 
 # Visualization 5b: Boxplot for Third-Person Sentiment Score by Occupation
@@ -220,7 +223,7 @@ plt.xlabel('Occupation')
 plt.ylabel('Average Sentiment Score')
 plt.xticks(rotation=45, ha='right')
 plt.tight_layout()
-plt.savefig('boxplot_sentiment_by_occupation_third.png')
+plt.savefig(f'{model_name}_boxplot_sentiment_by_occupation_third.png')
 plt.close()
 
 # --- 6. Sentiment Score by Sex (Male vs. Female) ---
@@ -239,7 +242,7 @@ plt.title('Average Sentiment Score by Sex')
 plt.xticks(index + bar_width / 2, sex_sentiment['sex'])
 plt.legend()
 plt.tight_layout()
-plt.savefig('sentiment_by_sex.png')
+plt.savefig(f'{model_name}_sentiment_by_sex.png')
 plt.close()
 
 # Optional: Boxplots for more detailed distribution
@@ -249,7 +252,7 @@ plt.title('First-Person Sentiment Score by Sex')
 plt.xlabel('Sex')
 plt.ylabel('Average Sentiment Score')
 plt.tight_layout()
-plt.savefig('boxplot_sentiment_by_sex_first.png')
+plt.savefig(f'{model_name}_boxplot_sentiment_by_sex_first.png')
 plt.close()
 
 plt.figure(figsize=(10, 6))
@@ -258,5 +261,5 @@ plt.title('Third-Person Sentiment Score by Sex')
 plt.xlabel('Sex')
 plt.ylabel('Average Sentiment Score')
 plt.tight_layout()
-plt.savefig('boxplot_sentiment_by_sex_third.png')
+plt.savefig(f'{model_name}_boxplot_sentiment_by_sex_third.png')
 plt.close()
