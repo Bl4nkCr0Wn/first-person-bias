@@ -1,6 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
+import seaborn as sns
 
 # Load the CSV file
 df = pd.read_csv('Qwen2.5-7B-Instruct_result.csv')
@@ -109,4 +110,153 @@ plt.xticks(index + bar_width / 2, country_sentiment['country'], rotation=45, ha=
 plt.legend()
 plt.tight_layout()
 plt.savefig('sentiment_by_country.png')
+plt.close()
+
+# --- 1. Response Length Analysis ---
+
+# Calculate the length of each response and then the average length
+for i in range(1, 6):
+    df[f'first_q{i}_len'] = df[f'first_q{i}'].str.len()
+    df[f'third_q{i}_len'] = df[f'third_q{i}'].str.len()
+
+first_person_len_cols = [f'first_q{i}_len' for i in range(1, 6)]
+third_person_len_cols = [f'third_q{i}_len' for i in range(1, 6)]
+
+df['first_person_avg_len'] = df[first_person_len_cols].mean(axis=1)
+df['third_person_avg_len'] = df[third_person_len_cols].mean(axis=1)
+
+# Overall average length
+overall_avg_len_first = df['first_person_avg_len'].mean()
+overall_avg_len_third = df['third_person_avg_len'].mean()
+
+# Visualization 1a: Overall Average Response Length
+plt.figure(figsize=(8, 6))
+bars = plt.bar(['First-Person', 'Third-Person'], [overall_avg_len_first, overall_avg_len_third], color=['#87CEEB', '#F08080'])
+plt.ylabel('Average Response Length (characters)')
+plt.title('Overall Average Response Length: First-Person vs. Third-Person')
+for bar in bars:
+    yval = bar.get_height()
+    plt.text(bar.get_x() + bar.get_width()/2.0, yval, f'{yval:.0f}', va='bottom', ha='center')
+plt.savefig('average_response_length.png')
+plt.close()
+
+# Group by occupation for length analysis
+occupation_len = df.groupby('occupation')[['first_person_avg_len', 'third_person_avg_len']].mean().reset_index()
+
+# Visualization 1b: Average Response Length by Occupation
+plt.figure(figsize=(12, 7))
+bar_width = 0.35
+index = np.arange(len(occupation_len['occupation']))
+plt.bar(index, occupation_len['first_person_avg_len'], bar_width, label='First-Person', color='#87CEEB')
+plt.bar(index + bar_width, occupation_len['third_person_avg_len'], bar_width, label='Third-Person', color='#F08080')
+plt.xlabel('Occupation')
+plt.ylabel('Average Response Length (characters)')
+plt.title('Average Response Length by Occupation')
+plt.xticks(index + bar_width / 2, occupation_len['occupation'], rotation=45, ha='right')
+plt.legend()
+plt.tight_layout()
+plt.savefig('response_length_by_occupation.png')
+plt.close()
+
+# --- 2. Age vs. Sentiment Correlation ---
+
+# Visualization 2: Scatter plot for Age vs. Sentiment
+plt.figure(figsize=(10, 6))
+sns.regplot(data=df, x='age', y='first_person_avg_score', scatter_kws={'alpha':0.6}, label='First-Person', color='#87CEEB')
+sns.regplot(data=df, x='age', y='third_person_avg_score', scatter_kws={'alpha':0.6}, label='Third-Person', color='#F08080')
+plt.title('Age vs. Sentiment Score with Trend Line')
+plt.xlabel('Age')
+plt.ylabel('Average Sentiment Score')
+plt.legend()
+plt.grid(True)
+plt.savefig('age_vs_sentiment.png')
+plt.close()
+
+# --- 3. Sentiment Score Distribution ---
+
+# Visualization 3: Histograms of Sentiment Scores
+plt.figure(figsize=(10, 6))
+sns.histplot(df['first_person_avg_score'], color="#87CEEB", label='First-Person', kde=True, stat="density", linewidth=0)
+sns.histplot(df['third_person_avg_score'], color="#F08080", label='Third-Person', kde=True, stat="density", linewidth=0)
+plt.title('Distribution of Sentiment Scores')
+plt.xlabel('Average Sentiment Score')
+plt.ylabel('Density')
+plt.legend()
+plt.savefig('sentiment_distribution.png')
+plt.close()
+
+# --- 4. Response Length vs. Sentiment Score ---
+
+# Visualization 4: Scatter plot for Response Length vs. Sentiment Score
+plt.figure(figsize=(10, 6))
+sns.scatterplot(data=df, x='first_person_avg_len', y='first_person_avg_score', label='First-Person', color='#87CEEB')
+sns.scatterplot(data=df, x='third_person_avg_len', y='third_person_avg_score', label='Third-Person', color='#F08080')
+plt.title('Response Length vs. Sentiment Score')
+plt.xlabel('Average Response Length (characters)')
+plt.ylabel('Average Sentiment Score')
+plt.legend()
+plt.grid(True)
+plt.savefig('length_vs_sentiment.png')
+plt.close()
+
+# --- 5. Sentiment Score by Occupation ---
+
+# Visualization 5a: Boxplot for First-Person Sentiment Score by Occupation
+plt.figure(figsize=(14, 7))
+sns.boxplot(data=df, x='occupation', y='first_person_avg_score', color='#87CEEB')
+plt.title('First-Person Sentiment Score by Occupation')
+plt.xlabel('Occupation')
+plt.ylabel('Average Sentiment Score')
+plt.xticks(rotation=45, ha='right')
+plt.tight_layout()
+plt.savefig('boxplot_sentiment_by_occupation_first.png')
+plt.close()
+
+# Visualization 5b: Boxplot for Third-Person Sentiment Score by Occupation
+plt.figure(figsize=(14, 7))
+sns.boxplot(data=df, x='occupation', y='third_person_avg_score', color='#F08080')
+plt.title('Third-Person Sentiment Score by Occupation')
+plt.xlabel('Occupation')
+plt.ylabel('Average Sentiment Score')
+plt.xticks(rotation=45, ha='right')
+plt.tight_layout()
+plt.savefig('boxplot_sentiment_by_occupation_third.png')
+plt.close()
+
+# --- 6. Sentiment Score by Sex (Male vs. Female) ---
+
+# Group by sex for average sentiment
+sex_sentiment = df.groupby('sex')[['first_person_avg_score', 'third_person_avg_score']].mean().reset_index()
+
+plt.figure(figsize=(8, 6))
+bar_width = 0.35
+index = np.arange(len(sex_sentiment['sex']))
+plt.bar(index, sex_sentiment['first_person_avg_score'], bar_width, label='First-Person', color='#87CEEB')
+plt.bar(index + bar_width, sex_sentiment['third_person_avg_score'], bar_width, label='Third-Person', color='#F08080')
+plt.xlabel('Sex')
+plt.ylabel('Average Sentiment Score')
+plt.title('Average Sentiment Score by Sex')
+plt.xticks(index + bar_width / 2, sex_sentiment['sex'])
+plt.legend()
+plt.tight_layout()
+plt.savefig('sentiment_by_sex.png')
+plt.close()
+
+# Optional: Boxplots for more detailed distribution
+plt.figure(figsize=(10, 6))
+sns.boxplot(data=df, x='sex', y='first_person_avg_score', color='#87CEEB')
+plt.title('First-Person Sentiment Score by Sex')
+plt.xlabel('Sex')
+plt.ylabel('Average Sentiment Score')
+plt.tight_layout()
+plt.savefig('boxplot_sentiment_by_sex_first.png')
+plt.close()
+
+plt.figure(figsize=(10, 6))
+sns.boxplot(data=df, x='sex', y='third_person_avg_score', color='#F08080')
+plt.title('Third-Person Sentiment Score by Sex')
+plt.xlabel('Sex')
+plt.ylabel('Average Sentiment Score')
+plt.tight_layout()
+plt.savefig('boxplot_sentiment_by_sex_third.png')
 plt.close()
